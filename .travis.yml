@@ -1,0 +1,24 @@
+dist: trusty
+sudo: required
+language: java
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+before_script:
+  - wget 'https://releases.hashicorp.com/consul/1.0.1/consul_1.0.1_linux_amd64.zip'
+  - unzip "consul_1.0.1_linux_amd64.zip"
+  - ./consul --version
+script: 
+  - ls -al /usr/lib/jvm/
+  - ./gradlew --refresh-dependencies build
+  - ./consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -enable-script-checks -bind=127.0.0.1 &
+  - ./gradlew runTests
+  - cat build/test-results/runTests/TEST-org.springcloud.hazelcast.discovery.consul.TestExplicitIpPortRegistrator.xml
+  - cat build/test-results/runTests/TEST-org.springcloud.hazelcast.discovery.consul.TestLocalDiscoveryNodeRegistrator.xml
+jdk:
+  - oraclejdk8
+  - openjdk8
