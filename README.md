@@ -1,6 +1,6 @@
 # hazelcast-consul-discovery-spi
 
-[![Build Status](https://travis-ci.org/bitsofinfo/hazelcast-consul-discovery-spi.svg?branch=master)](https://travis-ci.org/bitsofinfo/hazelcast-consul-discovery-spi)
+[![Build Status](https://travis-ci.org/XYUU/hazelcast-consul-discovery-spi.svg?branch=master)](https://travis-ci.org/XYUU/hazelcast-consul-discovery-spi)
 
 Provides a Consul based discovery strategy for Hazlecast 3.6+ enabled applications.
 This is an easy to configure plug-and-play Hazlecast DiscoveryStrategy that will optionally register each of your Hazelcast instances with Consul and enable Hazelcast nodes to dynamically discover one another via Consul.
@@ -23,27 +23,11 @@ This is an easy to configure plug-and-play Hazlecast DiscoveryStrategy that will
 
 ## <a id="status"></a>Status
 
-This is release candidate code, tested against Hazelcast 3.6-EA+ through 3.9.x stable releases, as well as Consul 0.7.x up to 1.0.x.
+This is release candidate code, tested against Hazelcast 3.6-EA+ through 3.9.x stable releases, as well as Consul 1.0.x up to 1.2.x.
 
 ## <a id="releases"></a>Releases
 
 * MASTER - in progress, this README refers to what is in the master tag. Switch to relevant RELEASE tag above to see that versions README
-
-* [1.0-RC8](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC8): Tweaks for Consul 0.8+ (health check sample script change). consul-client upgrade to 0.17.1; build.gradle HZ `3.+` dependency. Address post Consul 0.8 ACL notes (in README) for [#26]
-
-* [1.0-RC7](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC7): consul-client 0.13.12; Fix [#17] with PR https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/pull/18
-
-* [1.0-RC6](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC6): Fix [#12], consul-client 0.13.2 upgrade, fix base64 Java 8 issue. Tested against Hazelcast 3.6-EA+ through 3.7+ Stable releases
-
-* [1.0-RC5](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC5): Upgrade to latest consul-client [#11](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/issues/11) Tested against Hazelcast 3.6-EA+ through 3.6.4+ Stable releases
-
-* [1.0-RC4](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC4): Adds support for TCP/HTTP checks [#3](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/issues/3) Tested against Hazelcast 3.6-EA+ through 3.6 Stable releases
-
-* [1.0-RC3](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC3): Adds support for TLS [#2](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/issues/2) and Consul ACLs [#4](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/issues/4) Tested against Hazelcast 3.6-EA+ through 3.6 Stable releases
-
-* [1.0-RC2](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC2): Tested against Hazelcast 3.6-EA+ through 3.6 Stable releases
-
-* [1.0-RC1](https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/releases/tag/1.0-RC1): Tested against Hazelcast 3.6-EA+ through 3.6-RC1 Stable releases
 
 ## <a id="requirements"></a>Requirements
 
@@ -118,7 +102,7 @@ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -config-dir /path
 
 * Configure your hazelcast.xml configuration file to use the `ConsulDiscoveryStrategy` (similar to the below): [See hazelcast-consul-discovery-spi-example.xml](src/main/resources/hazelcast-consul-discovery-spi-example.xml) for a full example with documentation of options.
 
-* Launch your hazelcast instances, configured with the Consul discovery-strategy similar to the below: [see ManualRunner.java](src/test/java/org/bitsofinfo/hazelcast/discovery/consul/ManualRunner.java) example.
+* Launch your hazelcast instances, configured with the Consul discovery-strategy similar to the below: [see ManualRunner.java](src/test/java/cc/springcloud/hazelcast/discovery/consul/ManualRunner.java) example.
 
 ```
 <network>
@@ -143,13 +127,18 @@ consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -config-dir /path
 
               <property name="consul-acl-token"></property>
               <property name="consul-ssl-enabled">false</property>
-              <property name="consul-ssl-server-cert-file-path"></property>
-
               <property name="consul-registrator">cc.springcloud.hazelcast.discovery.consul.LocalDiscoveryNodeRegistrator</property>
               <property name="consul-registrator-config"><![CDATA[
     					{
     					  "preferPublicAddress":false,
-
+    					  "Check": {
+    					  	"Interval": 30s,
+    					  	"Timeout": 30s,
+    					  	"TCP": "#MYIP:#MYPORT",
+    					  	"DeregisterCriticalServiceAfter": null,
+    					  	"TLSSkipVerify": false,
+    					  	"Status": null
+    					  }
     					}
                   ]]></property>
         </properties>
@@ -218,7 +207,7 @@ compile group: 'com.hazelcast', name:'hazelcast', version:'3.9.4'
 
 ## Consul UI example
 
-Showing [LocalDiscoveryNodeRegistrator](src/main/java/org/bitsofinfo/hazelcast/discovery/consul/LocalDiscoveryNodeRegistrator.java) configured hazelcast services with health-checks
+Showing [LocalDiscoveryNodeRegistrator](src/main/java/cc/springcloud/hazelcast/discovery/consul/LocalDiscoveryNodeRegistrator.java) configured hazelcast services with health-checks
 
 ![Diagram of consul ui](/docs/consul_ui.png "Diagram1")
 
@@ -238,16 +227,16 @@ The task above will display output indicating the test has started and whether t
 
 ###### Sample output for passing test:
 ```
-org.bitsofinfo.hazelcast.discovery.consul.TestExplicitIpPortRegistrator > testExplicitIpPortRegistrator STARTED
+cc.springcloud.hazelcast.discovery.consul.TestExplicitIpPortRegistrator > testExplicitIpPortRegistrator STARTED
 
-org.bitsofinfo.hazelcast.discovery.consul.TestExplicitIpPortRegistrator > testExplicitIpPortRegistrator PASSED
+cc.springcloud.hazelcast.discovery.consul.TestExplicitIpPortRegistrator > testExplicitIpPortRegistrator PASSED
 ```
 
 ###### Sample output for failing test:
 ```
-org.bitsofinfo.hazelcast.discovery.consul.TestDoNothingRegistrator > testDoNothingRegistrator STARTED
+cc.springcloud.hazelcast.discovery.consul.TestDoNothingRegistrator > testDoNothingRegistrator STARTED
 
-org.bitsofinfo.hazelcast.discovery.consul.TestDoNothingRegistrator > testDoNothingRegistrator FAILED
+cc.springcloud.hazelcast.discovery.consul.TestDoNothingRegistrator > testDoNothingRegistrator FAILED
     java.lang.AssertionError at TestDoNothingRegistrator.java:85
 ```
 
@@ -270,7 +259,7 @@ The following parameters can be passed with the `-D` option when invoking the te
 -DconsulSslServerCertFilePath=(/path/to/ca.cert)
 -DconsulSslServerCertBase64=(base64 encoded cert string)
 -DconsulSslServerHostnameVerify=(false|True)
--DconsulHealthCheckProvider=(org.bitsofinfo.hazelcast.discovery.consul.ScriptHealthCheckBuilder | org.bitsofinfo.hazelcast.discovery.consul.HttpHealthCheckBuilder)
+-DconsulHealthCheckProvider=(cc.springcloud.hazelcast.discovery.consul.ScriptHealthCheckBuilder | cc.springcloud.hazelcast.discovery.consul.HttpHealthCheckBuilder)
 
 ```
 
@@ -279,8 +268,8 @@ The following parameters can be passed with the `-D` option when invoking the te
 * https://www.consul.io
 * http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#discovery-spi
 * https://www.consul.io/docs/guides/acl.html#complete-acl-coverage-in-consul-0-8
-* **Swarm** version of this: https://github.com/bitsofinfo/hazelcast-docker-swarm-discovery-spi 
-* **Etcd** version of this: https://github.com/bitsofinfo/hazelcast-etcd-discovery-spi
+* **Swarm** version of this: https://github.com/XYUU/hazelcast-docker-swarm-discovery-spi 
+* **Etcd** version of this: https://github.com/XYUU/hazelcast-etcd-discovery-spi
 
 ## <a id="todo"></a>Todo
 
@@ -290,7 +279,7 @@ The following parameters can be passed with the `-D` option when invoking the te
 
 ### <a id="docker"></a>Containerization (Docker) notes
 
-This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/bitsofinfo/docker-discovery-registrator-consul)
+This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/XYUU/docker-discovery-registrator-consul)
 
 One of the main drivers for coding this module was for Hazelcast applications that were deployed as Docker containers
 that would need to automatically register themselves with Consul for higher level cluster orchestration of the cluster.
@@ -299,16 +288,16 @@ If you are deploying your Hazelcast application as a Docker container, one helpf
 configuration in the hazelcast XML config, but rather have your Docker container take startup arguments that would be translated
 to `-D` system properties on startup. Convienently Hazelcast can consume these JVM system properties and replace variable placeholders in the XML config. See this documentation for examples: [http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#using-variables](http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#using-variables)
 
-Specifically when using this discovery strategy and Docker, it may be useful for you to use the [ExplicitIpPortRegistrator](src/main/java/org/bitsofinfo/hazelcast/discovery/consul/ExplicitIpPortRegistrator.java) `ConsulRegistrator` **instead** of the *LocalDiscoveryNodeRegistrator* as the latter relies on hazelcast to determine its IP/PORT and this may end up being the local container IP, and not the Docker host IP, leading to a situation where a unreachable IP/PORT combination is published to Consul.
+Specifically when using this discovery strategy and Docker, it may be useful for you to use the [ExplicitIpPortRegistrator](src/main/java/cc/springcloud/hazelcast/discovery/consul/ExplicitIpPortRegistrator.java) `ConsulRegistrator` **instead** of the *LocalDiscoveryNodeRegistrator* as the latter relies on hazelcast to determine its IP/PORT and this may end up being the local container IP, and not the Docker host IP, leading to a situation where a unreachable IP/PORT combination is published to Consul.
 
 **Example:** excerpt from [explicitIpPortRegistrator-example.xml](src/main/resources/explicitIpPortRegistrator-example.xml)
 
 Start your hazelcast app such as with the below, this would assume that hazelcast is actually reachable via this configuration
 via your Docker host and the port mappings that were specified on `docker run`. (i.e. the IP below would be your docker host/port that is mapped to the actual hazelcast app container and port it exposes for hazelcast).
 
-* This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/bitsofinfo/docker-discovery-registrator-consul) 
+* This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/XYUU/docker-discovery-registrator-consul) 
 
-* Also see: https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/issues/20 for info on how to do this.
+* Also see: https://github.com/XYUU/hazelcast-consul-discovery-spi/issues/20 for info on how to do this.
 
 See this [Docker issue for related info](https://github.com/docker/docker/issues/3778) on detecting mapped ports/ip from **within** a container
 
@@ -317,14 +306,22 @@ See this [Docker issue for related info](https://github.com/docker/docker/issues
 ```
 <property name="consul-registrator-config"><![CDATA[
       {
-        "registerWithIpAddress":"${registerWithIpAddress}",
-        "registerWithPort":${registerWithPort},
-        "healthCheckScript":"nc -z #MYIP #MYPORT",
-        "healthCheckScriptIntervalSeconds":30
+      	"preferPublicAddress": false,
+        "Check"：{
+        "Script":"nc -z #MYIP #MYPORT",
+        "Interval":30s,
+        "HTTP":"http://#MYIP:80",
+        "Timeout":30s,
+        "TCP":"#MYIP:#MYPORT",
+        "DeregisterCriticalServiceAfter":null,
+        "TLSSkipVerify":false,
+        "Status":null,
+        "TTL":30s
+        }
       }
   ]]></property>
 ```
-Until hazelcast fixes the numerous issues around interfaces/binding etc, you may be better off just running your hz app in a docker swarm and use: https://github.com/bitsofinfo/hazelcast-docker-swarm-discovery-spi  for peer to peer hazelcast cluster discovery.
+Until hazelcast fixes the numerous issues around interfaces/binding etc, you may be better off just running your hz app in a docker swarm and use: https://github.com/XYUU/hazelcast-docker-swarm-discovery-spi  for peer to peer hazelcast cluster discovery.
 
 ### Consul health-check notes
 
