@@ -47,7 +47,7 @@ repositories {
 }
 
 dependencies {
-	compile 'cc.springcloud:hazelcast-consul-discovery-spi:1.0-RC8'
+	compile 'cc.springcloud:hazelcast-consul-discovery-spi:1.0'
 }
 ```
 
