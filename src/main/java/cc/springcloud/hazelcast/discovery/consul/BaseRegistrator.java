@@ -127,7 +127,7 @@ public abstract class BaseRegistrator implements ConsulRegistrator {
     }
 
     /**
-     * 替换变量
+     * Replacement variable
      *
      * @param check
      * @param address

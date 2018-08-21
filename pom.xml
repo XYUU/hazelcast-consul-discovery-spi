@@ -32,4 +32,10 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>bintray-repo-maven</id>
+            <url>https://api.bintray.com/maven/xyuustudio/springcloud/hazelcast-consul-discovery-spi/;publish=1</url>
+        </repository>
+    </distributionManagement>
 </project>
