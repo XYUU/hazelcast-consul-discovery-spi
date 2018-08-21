@@ -9,6 +9,7 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 before_script:
+  - chmod +x gradlew
   - wget 'https://releases.hashicorp.com/consul/1.2.1/consul_1.2.1_linux_amd64.zip'
   - unzip "consul_1.2.1_linux_amd64.zip"
   - ./consul --version
