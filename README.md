@@ -268,8 +268,8 @@ The following parameters can be passed with the `-D` option when invoking the te
 * https://www.consul.io
 * http://docs.hazelcast.org/docs/3.6/manual/html-single/index.html#discovery-spi
 * https://www.consul.io/docs/guides/acl.html#complete-acl-coverage-in-consul-0-8
-* **Swarm** version of this: https://github.com/XYUU/hazelcast-docker-swarm-discovery-spi 
-* **Etcd** version of this: https://github.com/XYUU/hazelcast-etcd-discovery-spi
+* **Swarm** version of this: https://github.com/bitsofinfo/hazelcast-docker-swarm-discovery-spi 
+* **Etcd** version of this: https://github.com/bitsofinfo/hazelcast-etcd-discovery-spi
 
 ## <a id="todo"></a>Todo
 
@@ -279,7 +279,7 @@ The following parameters can be passed with the `-D` option when invoking the te
 
 ### <a id="docker"></a>Containerization (Docker) notes
 
-This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/XYUU/docker-discovery-registrator-consul)
+This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/bitsofinfo/docker-discovery-registrator-consul)
 
 One of the main drivers for coding this module was for Hazelcast applications that were deployed as Docker containers
 that would need to automatically register themselves with Consul for higher level cluster orchestration of the cluster.
@@ -295,9 +295,9 @@ Specifically when using this discovery strategy and Docker, it may be useful for
 Start your hazelcast app such as with the below, this would assume that hazelcast is actually reachable via this configuration
 via your Docker host and the port mappings that were specified on `docker run`. (i.e. the IP below would be your docker host/port that is mapped to the actual hazelcast app container and port it exposes for hazelcast).
 
-* This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/XYUU/docker-discovery-registrator-consul) 
+* This library may also be helpful to you: [docker-discovery-registrator-consul](https://github.com/bitsofinfo/docker-discovery-registrator-consul) 
 
-* Also see: https://github.com/XYUU/hazelcast-consul-discovery-spi/issues/20 for info on how to do this.
+* Also see: https://github.com/bitsofinfo/hazelcast-consul-discovery-spi/issues/20 for info on how to do this.
 
 See this [Docker issue for related info](https://github.com/docker/docker/issues/3778) on detecting mapped ports/ip from **within** a container
 
@@ -321,7 +321,7 @@ See this [Docker issue for related info](https://github.com/docker/docker/issues
       }
   ]]></property>
 ```
-Until hazelcast fixes the numerous issues around interfaces/binding etc, you may be better off just running your hz app in a docker swarm and use: https://github.com/XYUU/hazelcast-docker-swarm-discovery-spi  for peer to peer hazelcast cluster discovery.
+Until hazelcast fixes the numerous issues around interfaces/binding etc, you may be better off just running your hz app in a docker swarm and use: https://github.com/bitsofinfo/hazelcast-docker-swarm-discovery-spi  for peer to peer hazelcast cluster discovery.
 
 ### Consul health-check notes
 
